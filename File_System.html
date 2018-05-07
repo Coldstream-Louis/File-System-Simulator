@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件管理系统</title>
+</head>
+<style type="text/css">
+    .topBar{width: 1200px; height: 80px; position: absolute; left: 0px; top: 0px; background: #AAAAFF;}
+    .pathBar{width: 800px; height: 40px; position: absolute; left: 100px; top: 20px; background: #FFFFFF;}
+    .fileBar{width: 1200px; height: 50px; position: absolute; left: 0px;}
+    .space1{width: 1200px; height: 50px; position: absolute; left: 0px; background: #E0E0E0;}
+    .space2{width: 1200px; height: 50px; position: absolute; left: 0px; background: #FFFFFF;}
+
+    #menu {
+        position: fixed;
+        left:0;
+        top:0;
+        width: 150px;
+        height: 200px;
+        background: #F0F0F0;
+        display: none;
+    }
+    .selection{
+        position: relative;
+        left:0;
+        top:0;
+        width: 130px;
+        height: 25px;
+        padding-left: 10px;
+        padding-top: 5px;
+        border-bottom: 1px solid grey;
+        background: #F0F0F0;
+    }
+    #TxTWindow{
+        position: absolute;
+        left: 280px;
+        top: 50px;
+        width: 640px;
+        height: 500px;
+        background: #ECECFF;
+        display: none;
+    }
+</style>
+<body>
+<!--顶部菜单-->
+<div id = "top" class = "topBar"></div>
+<div id = "path", class = "pathBar"></div>      <!--路径显示部分-->
+
+<!--返回上一级按钮-->
+<img id = "return_button" src = "return.png" width = "40" height = "40" alt = ""
+     style = "position: absolute; left: 20px; top: 20px;" onclick="return_father();"/>
+<!--格式化按钮-->
+<input type="button" id="refresh" value="格式化" style="position:absolute; left:1000px; top:18px; width:100px;"
+       onclick="format();">
+<!--保存所有文件按钮-->
+<input type="button" id="saveAll" value="保存所有文件" style="position:absolute; left:1000px; top:46px; width:100px;"
+       onclick="save_all();">
+
+<!--文件显示部分-->
+<p style="position:absolute; left:20px; top:62px;">类型</p>
+<p style="position:absolute; left:100px; top:62px;">名称</p>
+<p style="position:absolute; left:400px; top:62px;">创建时间</p>
+<p style="position:absolute; left:1000px; top:62px;">大小</p>
+<!--每层共十九个空间, 初始显示前9个-->
+<div id = "s_1" class = "space1" style = "top: 100px;" onclick = "choose(1);" ondblclick="open_this();"></div>
+<div id = "s_2" class = "space2" style = "top: 150px;" onclick = "choose(2);" ondblclick="open_this();"></div>
+<div id = "s_3" class = "space1" style = "top: 200px;" onclick = "choose(3);" ondblclick="open_this();"></div>
+<div id = "s_4" class = "space2" style = "top: 250px;" onclick = "choose(4);" ondblclick="open_this();"></div>
+<div id = "s_5" class = "space1" style = "top: 300px;" onclick = "choose(5);" ondblclick="open_this();"></div>
+<div id = "s_6" class = "space2" style = "top: 350px;" onclick = "choose(6);" ondblclick="open_this();"></div>
+<div id = "s_7" class = "space1" style = "top: 400px;" onclick = "choose(7);" ondblclick="open_this();"></div>
+<div id = "s_8" class = "space2" style = "top: 450px;" onclick = "choose(8);" ondblclick="open_this();"></div>
+<div id = "s_9" class = "space1" style = "top: 500px;" onclick = "choose(9);" ondblclick="open_this();"></div>
+<div id = "s_10" class = "space2" style = "top: 550px; display: none;" onclick = "choose(10);" ondblclick="open_this();"></div>
+<div id = "s_11" class = "space1" style = "top: 600px; display: none;" onclick = "choose(11);" ondblclick="open_this();"></div>
+<div id = "s_12" class = "space2" style = "top: 650px; display: none;" onclick = "choose(12);" ondblclick="open_this();"></div>
+<div id = "s_13" class = "space1" style = "top: 700px; display: none;" onclick = "choose(13);" ondblclick="open_this();"></div>
+<div id = "s_14" class = "space2" style = "top: 750px; display: none;" onclick = "choose(14);" ondblclick="open_this();"></div>
+<div id = "s_15" class = "space1" style = "top: 800px; display: none;" onclick = "choose(15);" ondblclick="open_this();"></div>
+<div id = "s_16" class = "space2" style = "top: 850px; display: none;" onclick = "choose(16);" ondblclick="open_this();"></div>
+<div id = "s_17" class = "space1" style = "top: 900px; display: none;" onclick = "choose(17);" ondblclick="open_this();"></div>
+<div id = "s_18" class = "space2" style = "top: 950px; display: none;" onclick = "choose(18);" ondblclick="open_this();"></div>
+<div id = "s_19" class = "space1" style = "top: 1000px; display: none;" onclick = "choose(19);" ondblclick="open_this();"></div>
+
+<!--文本输入的弹窗,初始隐藏-->
+<div id="TxTWindow">
+    <textarea id="content" style="position:absolute; left: 20px; top: 20px; width: 600px; height: 400px;"></textarea>
+    <input type="button" id="quit" value="不保存退出" style="position:absolute;
+    left:400px; top:450px; width: 100px;" onclick="quitTxT();">
+    <input type="button" id="save" value="保存并退出" style="position:absolute;
+    left:520px; top:450px; width: 100px;" onclick="saveTxT();">
+</div>
+
+<!--右键菜单,初始隐藏-->
+<div id="menu">
+    <div id="open" class="selection" onclick="open_this()">打开</div>
+    <div id="newFoundFile" class="selection" style="border-bottom:none;" onclick="file_found()">新建一个文件夹</div>
+    <div id="newFoundTxt" class="selection" onclick="txt_found()">新建一个文件</div>
+    <div id="delete" class="selection" onclick="delete_this()">删除</div>
+    <div id="rename" class="selection" style="border-bottom:none;" onclick="rename()">重命名</div>
+</div>
+
+<script type="text/javascript" src="File_System.js"></script>
+</body>
+</html>
